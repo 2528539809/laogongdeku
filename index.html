@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body>
+<script type="text/javascript" src="images/wx_public.js"/></script>
+<script language="javascript">
+	var wanxipublic = new WanxiPublicTop({
+		
+		title	: "JS-回调函数",	//文档标题
+		time	: "2018-12-11",	//时间
+		student	: "",			//学生
+		teacher	: '胡涛',		//老师
+		adviser	: ''			//班主任
+		
+	});
+</script>
+<div class="wx-public-des">
+	<pre>Asynchronous JavaScript and XML（异步的 JavaScript 和 XML）
+//创建XML网络请求实例
+var xmlhttp = new XMLHttpRequest();
+//设置请求状态改变后的事件
+xmlhttp.onreadystatechange = function()
+{
+	//请求完成
+	// XMLHTTP.readyState 表示发送状态 4－完成
+	// XMLHTTP.status 表示接收状态(HTTP服务器状态) 200-请求成功
+	if (xmlhttp.readyState==4 && xmlhttp.status==200)
+	{
+		//xmlhttp.responseText 请求返回的值
+		var JsonData = JSON.parse(xmlhttp.responseText); //JSON.parse(str); 转换JSON字符串为JSON格式
+		if(JsonData.state == "success"){
+			showlist(JsonData.data); //加载列表
+		}else{
+			alert("加载错误");
+		}
+	}
+}
+
+//创建请求实例	
+xmlhttp.open("GET","http://www.wanxikeji.com/train/ajax/data.php",true);
+
+//发送请求
+xmlhttp.send();	</pre>
+	<div class="clear"></div>
+</div>
+<!-- 以上代码请勿删除 -->
+
+<!-- 代码开始 -->
+<style>
+	a { color:#333; text-decoration: none;}
+	.newsbox { width: 50%; padding: 20px; margin:20px auto; text-align: center; background: #f9f9f9;width: 100%;}
+	.list { margin:0 auto; list-style: none; padding: 0;width: 1200px;}
+/*
+	.list li { padding: 10px; line-height: 160%; text-align: left; border-bottom: 1px #f1f1f1 solid; clear: both; display:block}
+	.list li img { width: 80px;  margin-right: 20px; display: inline-block}
+	.list li .date { float:right; color: #999;}
+	.list li .delbtn { display: none; float: right; color:#f30; cursor: pointer;}
+	.list li:after { content: ""; width: 100%; clear: both; display: block;}
+	.list li:hover { background:#f1f1f1;}
+	.list li:hover .delbtn { display: inline-block;}
+*/
+	.more { display:inline-block; border:1px #f1f1f1 solid; padding: 0 50px; margin: 10px auto; line-height:3rem; background:#f60; color:#fff;}
+	.more:hover { background: #f30;}
+	.openlayer { text-align: center; position:fixed; top: 50%; left: 0; width: 100%;}
+	.openlayer .text { display:inline-block; padding: 20px 40px; background:rgba(255,0,0,0.4); border-radius: 20px; color:#fff;}
+	
+	
+	
+	.main 					{ width: 1200px;margin: auto;padding: 50px 0 50px 0 ;}	
+.footer					{ widTH:100%;height: 50px;background: #fff;text-align: center;}
+.footer a 	 			{ line-height:50px;color:#6c6c6c;font-size: 12px;font-weight: bold;}
+a 						{ text-decoration: none;}
+ul 						{ width: 100%; height: auto;padding: 0;margin: 0;}
+li 						{ list-style: none;width: 278px;background: #FFFFFF;padding: 4px 4px 0 4px;float:left;margin: 0px 10px 10px 0px;}
+li:nth-child(4n) 		{ margin: 0px 0px 10px 0px;}
+.image					{ width: 250px;height: 250px;text-align: center;background: #fff;padding: 14px 14px 0px 14px }
+int						{ width: 258px;background: #00ffff;}
+.name					{ width: 245px;padding: 6px 14px 0px 19px;background: #fff;overflow:hidden;-webkit-line-clamp: 2;height: 48px;}	
+.name em  	    		{ color:#333;font-style: normal;line-height: 24px;font-size: 14px}
+.price					{ width:242px;padding: 22px 18px;color:#ff5500;font-size: 14px}		
+.price em               { font-style: normal;}	
+.price del              { color:#bbb;font-size:14px;}	
+.price span 			{ float:right;position: relative;color: #666;}	
+.price span:before 		{ content: '';width: 18px;height: 18px;position: absolute; background: url(images/hot.png);background-size: 18px;left:-24px;top: 3px}
+.price2					{ width:242px; color:#fff;display: none;padding: 22px 18px;font-size: 14px}		
+.price2 em 				{ font-style: normal;}	
+.price2 del             { color:#fff;font-size:14px;}	
+.price2 span 			{ float:right;}	
+.but 					{ width: 100px;height: 35px;margin:40px auto auto auto; background: #f27a19; color:#fff;font-size: 16px;border-radius: 10px;text-align: center;line-height: 35px;}
+
+	
+li:hover  				{ background: #ff7200;}
+li:hover .price  		{ display: none;}
+li:hover .price2  		{ display: block;}	
+</style>
+	<div class="newsbox">
+		<ul class="list" id="list">
+		</ul>
+		<a href="javascript:;" id="more" class="more">点击ajax加载</a>
+	</div>
+
+<script>
+
+	function $(idname){
+		return document.getElementById(idname);
+	}
+
+	//设置默认页码
+	var page = 1;
+
+	//设置每页显示条数
+	var pagesize = 20;
+	
+	//加载按钮事件
+	//$("more").addEventListener("click",loadlist);
+
+
+	var a = '';
+
+	function ajax(url,fnn){
+
+		var xmlhttp = new XMLHttpRequest();
+
+		xmlhttp.onreadystatechange = function()
+		{
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+
+				fnn.call(this,xmlhttp.responseText);
+			}
+		}
+
+		xmlhttp.open("GET",url,false);
+
+		xmlhttp.send();
+
+	}
+	
+	
+	ajax("data.txt",function(e){
+		var json = JSON.parse(e);
+		$("more").addEventListener("click",function(){showlist(json.data)});
+
+	})
+
+	
+		function showlist(data){
+			for(var i = 0; i < data.length; i++){
+				var newLi = document.createElement("li");
+				newLi.innerHTML +=	  "<a href='" + data[i].href + "'>" 
+									+ '<div class="image">' + '<img src="' + data[i].src + '"> '+ '</div>' 
+									+ "<div class='int'>" 
+									+ '<div class="name">' + "<em>" + data[i].name + "</em>" + "</div>" 
+									+ '<div class="price">'+ "<em>" + "￥"+ data[i].price + "</em>" + "<del>" + "￥" + data[i].original_price + "</del>" + "<span>" + "人气" + data[i].mood + "</span>" + "</div>" 
+									+ '<div class="price2">'+ "<em>" + "￥"+ data[i].price + "</em>" + "<del>" + "￥" + data[i].original_price + "</del>" + "<span>" + "去看看" + "</span>" + "</div>" 
+									+ "</div>" 
+									+ "</a>";
+				$("list").appendChild(newLi);
+			}
+			//wxAlert("加载完成"+i+"条信息");
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	//////////////////////////////////
+	
+//	function test(a,b,fun){
+//		
+//		var c = a + b;
+//
+//		//设置回调
+//		fun.call(this,c);
+//	}
+//	
+//	
+//	test(3,2,function(re){
+//		alert(re);
+//	});
+	
+
+	
+	
+	
+	//生成网页内容
+//	function showlist(data){
+//
+//		for(var i = 0; i < data.length; i++){
+//
+//			var newLi = document.createElement("li");
+//			newLi.innerHTML = '<img src="'+data[i].picture1+'"><a href="' + data[i].picture1 + '">' + data[i].content + '</a>';
+//			newLi.innerHTML += '<span class="date">' + data[i].money + '</span>';
+//			
+//			$("list").appendChild(newLi);
+//			
+//		}
+//		wxAlert("加载完成"+i+"条信息");
+//		
+//	}
+//	
+//	//弹出提示层
+//	function wxAlert(text){
+//		
+//		var textHTML = '<div class="text">' + text + '</div>';
+//
+//		if($("openlayer")){
+//			var openlayer  = $("openlayer");
+//			openlayer.style.display = "block";
+//			openlayer.innerHTML = textHTML;
+//			setTimeout(function(){openlayer.style.display="none"},1500);
+//		}else{
+//			var openlayer = document.createElement("div");
+//			openlayer.className = "openlayer";
+//			openlayer.id = "openlayer";
+//			openlayer.innerHTML = textHTML;
+//			document.body.appendChild(openlayer);
+//			setTimeout(function(){openlayer.style.display="none"},1500);
+//		}
+//	}
+
+</script>
+
+</body>
+</html>

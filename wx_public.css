@@ -1,0 +1,12 @@
+htmk,body { padding:0; margin:0;}
+div { padding:0; margin:0 auto;}
+.clear { clear:both;}
+.wx-public-top { height:65px; background:#fff; font-size:14px; border-bottom:1px #efefef solid; z-index:9999; }
+.wx-public-right { float:right; }
+.wx-public-title { font-size:24px; line-height:65px; display:inline-block; margin-left:20px; font-weight:bold; float:left;}
+.wx-public-logo { float:left; height:25px; margin:20px 20px auto 20px;}
+.wx-public-toptag { float:right; margin:auto 20px auto auto; line-height:65px; color:#999;}
+.wx-public-des { background:#f9f9f9; color:#666; font-size:12px; padding:20px; line-height:180%;}
+.wx-public-author { display:inline-block; color:#aaa; line-height:30px; margin:19px auto auto 40px; background:#f9f9f9; padding:0 20px; border-radius:15px; float:left;}
+.wx-public-author span { margin-right:10px; font-size:12px;}
+.wx-public-author em, .wx-public-author i { font-style:normal; color:#000;}
